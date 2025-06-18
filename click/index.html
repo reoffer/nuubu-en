@@ -1,34 +1,48 @@
-<!-- 放在需要跳转的页面 -->
-<script>
-    (function () {
-        // 只读取 localStorage
-        const gclid = localStorage.getItem('gclid') || '0';
-        const fbclid = localStorage.getItem('fbclid') || '0';
-        const scCid = localStorage.getItem('sc_cid') || '0';
-        const utmTerm = localStorage.getItem('utm_term') || '0';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script>
+        (function () {
+            function safeDecode(value) {
+                try {
+                    return decodeURIComponent(decodeURIComponent(value));
+                } catch (e) {
+                    try {
+                        return decodeURIComponent(value);
+                    } catch {
+                        return value;
+                    }
+                }
+            }
 
-        // 选择一个存在的 ID：gclid > fbclid > ScCid
-        const trackingId = gclid !== '0' ? gclid : fbclid !== '0' ? fbclid : scCid;
+            function getURLParameter(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const rawValue = urlParams.get(name);
+                return rawValue ? safeDecode(rawValue) : null;
+            }
 
-        const baseUrl = 'https://nmttrack.com/';
-        const params = new URLSearchParams({
-            a: '146518',
-            c: '407789',
-            co: '194328',
-            mt: '5',
-            s1: 'Google',
-            s2: 'XHD',
-            s3: 'AW-17028711680/YkwnCLnF-74aEICK9rc_',
-            s4: 'lulutoxus.onrender.com-AU',
-            s5: trackingId || '0',
-            utm_term: utmTerm
-        });
+            let gclid = getURLParameter('gclid') || localStorage.getItem('gclid') || '0';
+            let utmTerm = getURLParameter('utm_term') || localStorage.getItem('utm_term') || '0';
 
-        const finalUrl = baseUrl + '?' + params.toString();
+            // 存入 localStorage 方便后续使用
+            localStorage.setItem('gclid', gclid);
+            localStorage.setItem('utm_term', utmTerm);
 
-        // 避免在目标域重复跳转
-        if (!window.location.href.includes('nmttrack.com')) {
-            window.location.href = finalUrl;
-        }
-    })();
-</script>
+            // 构造跳转 URL
+            const targetUrl = 'https://click-ecom.com/?a=146518&o=165196&c=0&co=194328&mt=5'
+                + '&s1=Google&s2=XHD'
+                + '&s3=AW-16949989743/iHTPCNS-3sEaEO-isZI_'
+                + '&s4=nuubu-en.onrender.com'
+                + '&s5=' + encodeURIComponent(gclid)
+                + '&utm_term=' + encodeURIComponent(utmTerm);
+
+            // 执行跳转
+            window.location.href = targetUrl;
+        })();
+    </script>
+</head>
+<body>
+</body>
+</html>
