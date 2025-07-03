@@ -1760,8 +1760,9 @@ ol {
 
 a {
     --tw-text-opacity: 1;
-    color: rgb(0 0 0);
-    text-decoration-line: underline
+    color: rgb(255 255 255);
+    text-decoration-line: underline;
+    background-color: #06bc07;
 }
 
 a:visited {
